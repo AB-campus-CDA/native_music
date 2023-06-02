@@ -1,5 +1,6 @@
-import {Image, StyleSheet, View} from "react-native";
 import React from "react";
+import {Image, StyleSheet} from "react-native";
+import {Link} from "react-native-url-router";
 
 
 type PlaylistProps = {
@@ -8,14 +9,14 @@ type PlaylistProps = {
 
 export function PlaylistVignette(props: PlaylistProps): JSX.Element {
     const {data} = props
-    console.log(data.images[0].url)
     //{href, name, id, tracks}
 
 
     return (
-        <View style={styles.container}>
+        // @ts-ignore
+        <Link to={'playlist/'+data.id.toString()} style={styles.container}>
             <Image style={styles.image} source={{uri: data.images[0].url}} />
-        </View>
+        </Link>
     )
 }
 

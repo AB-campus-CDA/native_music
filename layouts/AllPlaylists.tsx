@@ -1,10 +1,11 @@
 import {FlatList, StyleSheet, View} from "react-native";
-import React, {useEffect, useState} from "react";
+import React from "react";
 
-import {featuredPlaylists, getOnePlaylist} from "../services/spotify";
+import {featuredPlaylists} from "../services/spotify";
 
 import Title from "../components/Title";
 import {PlaylistVignette} from "../components/PlaylistVignette";
+import {Background} from "./Background";
 
 
 type AllPlaylistsProps = {
@@ -25,6 +26,7 @@ export default function AllPlaylists(props: AllPlaylistsProps): JSX.Element {
 
     return (
         <View style={styles.container}>
+            <Background/>
             <Title title={"All playlists"} pos={"top"} color={'black'}/>
             <FlatList
                 numColumns={3}

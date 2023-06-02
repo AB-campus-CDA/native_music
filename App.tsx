@@ -1,11 +1,13 @@
-import {StyleSheet, Text, View} from 'react-native';
 import {useEffect, useState} from "react";
+import {StyleSheet, Text, View} from 'react-native';
+import {NativeRouter, Route, StackNavigator} from "react-native-url-router";
 
 import {spotifyToken, getAccessToken, featuredPlaylists, getAllPlaylists} from "./services/spotify";
 
-import {LinearGradient} from "expo-linear-gradient";
 import AllPlaylists from "./layouts/AllPlaylists";
 import {storeStr} from "./utils/storage";
+import OnePlaylist from "./layouts/OnePlaylist";
+
 
 export default function App(): JSX.Element {
     const [spotifyCredentials, setSpotifyCredentials] = useState<spotifyToken|null>(null)
@@ -38,19 +40,28 @@ export default function App(): JSX.Element {
 
     return (
         <View style={styles.container}>
-            <LinearGradient
-                colors={[ '#fcb045', 'black', 'black']}
-                style={styles.gradient}
-            />
 
             {spotifyCredentials
-                ? null
-                : <Text style={{color: 'white'}}>not connected :(</Text>
-            }
+                ?
+                // @ts-ignore
+                <NativeRouter>
+                    <StackNavigator>
+                        <Route
+                            path="/"
+                            element={<AllPlaylists playlists={allPlayLists} />}
+                        />
+                        <Route
+                            path="playlist/:playlistId"
+                            element={<OnePlaylist />}
+                        />
 
-            {allPlayLists?.length
-                ? <AllPlaylists playlists={allPlayLists} />
-                : <Text style={{color: 'white'}}>no playlist</Text>
+                    </StackNavigator>
+                </NativeRouter>
+
+
+
+                //TODO change the text for a nice spinning loader
+                : <Text style={{color: 'white'}}>not connected :(</Text>
             }
 
         </View>
@@ -63,12 +74,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-    gradient: {
-      position: "absolute",
-      zIndex:0,
-        width: '100%',
-        height: '100%'
-    },
     text: {
       color: 'white',
       margin: 50

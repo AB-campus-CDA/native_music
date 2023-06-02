@@ -1,32 +1,52 @@
 import {FlatList, StyleSheet, View} from "react-native";
 import React, {useEffect, useState} from "react";
 
-import {featuredPlaylists, getOnePlaylist} from "../services/spotify";
+import {getOnePlaylist, PL} from "../services/spotify";
 
 import Title from "../components/Title";
 import {PlaylistVignette} from "../components/PlaylistVignette";
+import {Background} from "./Background";
+import {getStr} from "../utils/storage";
+import {AlbumVignette} from "../components/AlbumVignette";
+import {useParams, useRoutes} from "react-router";
 
 
-type HomeProps = {
-    playlists: featuredPlaylists | null
-}
 
 /**
  * Home will display the list of Spotify featured playlists
- * @param props
  * @constructor
  */
-export default function OnePlaylist(props: HomeProps): JSX.Element {
-    const {playlists} = props
+export default function OnePlaylist(): JSX.Element {
+    //const {id} = props
+    const [token, setToken] = useState<string>("")
+    const [playlist, setPlaylist] = useState(null)
 
+    const params = useParams()
+
+
+    useEffect(() => {
+        getStr('token').then(value => setToken(value))
+    }, [])
+
+    useEffect(() => {
+        if (token!=="") {
+            getOnePlaylist(token, params.playlistId)
+                .then(resp => {
+                    setPlaylist(resp)
+                })
+        }
+    }, [token])
 
 
     return (
         <View style={styles.container}>
-            <Title title={"All playlists"} pos={"top"} color={'black'}/>
+            <Background/>
+            <Title title={playlist?.name} pos={"top"} color={'black'}/>
             <FlatList
-                data={playlists}
-                renderItem={ ({item}) => <PlaylistVignette data={item}/>}
+                numColumns={3}
+                // @ts-ignore
+                data={playlist?.tracks.items}
+                renderItem={ ({item}) => <AlbumVignette data={item}/>}
             />
         </View>
     )

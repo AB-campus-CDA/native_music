@@ -109,8 +109,8 @@ export async function getOnePlaylist(token: string, id: string): Promise<any> {
         .get('https://api.spotify.com/v1/playlists/'+id, config)
         .then(resp => {
             console.log("get ONE playlist RESP :", resp.data)
-            const {href, name, id, tracks} = resp.data
-            return {href, name, id, tracks}
+            const {name, tracks} = resp.data
+            return {name, tracks}
 
         })
         .catch(err => {

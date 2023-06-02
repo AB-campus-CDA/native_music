@@ -1,27 +1,34 @@
-import {StyleSheet, Text, View} from "react-native";
+import {Image, StyleSheet} from "react-native";
 import React from "react";
+import {Link} from "react-native-url-router";
 
 
 type AlbumProps = {
-    title: string
+    data: any
 }
 
 export function AlbumVignette(props: AlbumProps): JSX.Element {
-    const {title} = props
+    const {data} = props
 
     return (
-        <View style={styles.item}>
-            <Text style={styles.title}>{title}</Text>
-        </View>
+        // @ts-ignore
+        <Link to={'album/'+data.track.album.id.toString()} style={styles.container}>
+            <Image style={styles.image} source={{uri: data.track.album.images[0].url}} />
+        </Link>
     )
 }
 
 
+
 const styles = StyleSheet.create({
-    item: {
+    container: {
         backgroundColor: '#f9c2ff',
         marginVertical: 8,
         marginHorizontal: 8,
+        width: 80,
+        height: 80
+    },
+    image: {
         width: 80,
         height: 80
     },
